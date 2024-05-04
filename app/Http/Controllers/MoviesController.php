@@ -55,14 +55,26 @@ class MoviesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($id, $media_type = "")
     {
+        if (!empty($media_type)) {
+            if ($media_type === 'tv') {
+                $movie = Http::withToken(config('services.tmdb.token'))
+                    ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=credits,videos,images')
+                    ->json();
+            } else {
+                $movie = Http::withToken(config('services.tmdb.token'))
+                    ->get('https://api.themoviedb.org/3/movie/' . $id . '?append_to_response=credits,videos,images')
+                    ->json();
+            }
+        } else {
+            $movie = Http::withToken(config('services.tmdb.token'))
+                ->get('https://api.themoviedb.org/3/movie/' . $id . '?append_to_response=credits,videos,images')
+                ->json();
+        }
 
-        $movie = Http::withToken(config('services.tmdb.token'))
-            ->get('https://api.themoviedb.org/3/movie/' . $id . '?append_to_response=credits,videos,images')
-            ->json();
 
-
+        // dump($movie);
         return view('show', [
             'movie' => $movie,
         ]);

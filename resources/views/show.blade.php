@@ -1,14 +1,16 @@
 @extends('layouts.main')
 <!-- TAKES FROM THE 'main'.blade.php -->
-
-
 @section('content')
+@php
+//dd($movie);
+@endphp
+
 <div class="movie-info">
     <div class="movie-info border-b border-gray-800">
         <div class="container mx-auto px-3 py-16 flex flex-col md:flex-row ">
             <img src="{{'https://image.tmdb.org/t/p/w500'.$movie['poster_path']}}" alt="movie" class="w-80 md:w-96">
             <div class="md:ml-24">
-                <h2 class="text-4xl font-semibold mb-2">{{$movie['title']}}</h2>
+                <h2 class="text-4xl font-semibold mb-2">{{ $movie['title'] ?? $movie['name'] }}</h2>
                 <div class="flex flex-wrap items-center text-gray-400 text-sm">
                     <span><svg class="fill-current text-orange-500 w-4" viewBox="0 0 24 24">
                             <g data-name="Layer 2">
@@ -17,7 +19,7 @@
                         </svg></span>
                     <span class="ml-1">{{ $movie['vote_average'] * 10 . '%'}}</span>
                     <span class="mx-2">|</span>
-                    <span>{{ \Carbon\Carbon::parse($movie['release_date'])->format('M d, Y')}}</span>
+                    <span>{{ \Carbon\Carbon::parse($movie['release_date'] ?? $movie['first_air_date'])->format('M d, Y')}}</span>
                     <span class="mx-2">|</span>
                     <span>
                         @foreach ($movie['genres'] as $genre)
@@ -44,16 +46,19 @@
                     @endforeach
 
                 </div>
+
+                @if (count($movie['videos']['results']) > 0)
                 <div class="mt-12">
-                    <button class="flex items-center bg-orange-400 text-gray-900 rounded font-semibold px-5 py-4 hover:bg-orange-500 transition ease-in-out duration-150">
+                    <a href="https://youtube.com/watch?v={{$movie['videos']['results']['0']['key']}}" class="inline-flex items-center bg-orange-400 text-gray-900 rounded font-semibold px-5 py-4 hover:bg-orange-500 transition ease-in-out duration-150">
                         <svg class="w-6 fill-current" viewBox="0 0 24 24">
                             <path d="M0 0h24v24H0z" fill="none" />
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14V8l8 4-8 4z" />
                         </svg>
                         <span class="ml-2">Play Trailer</span>
 
-                    </button>
+                    </a>
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -65,33 +70,16 @@
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold">Cast</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-            <div class="mt-8">
-                <img src="{{asset('img/timothee.webp')}}" alt="">
-                <div class="mt-4">Timothee Chalamet</div>
-                <div class="text-sm text-gray-400">Paul Atreides</div>
-            </div>
-            <div class="mt-8">
-                <img src="{{asset('img/zendaya.webp')}}" alt="">
-                <div class="mt-4">Zendaya</div>
-                <div class="text-sm text-gray-400">Chani</div>
-            </div>
-            <div class="mt-8">
-                <img src="{{asset('img/jessica.webp')}}" alt="">
-                <div class="mt-4">Rebecca Ferguson</div>
-                <div class="text-sm text-gray-400">Jessica</div>
-            </div>
-            <div class="mt-8">
-                <img src="{{asset('img/stilgar.webp')}}" alt="">
-                <div class="mt-4">Javier Bardem</div>
-                <div class="text-sm text-gray-400">Stilgar</div>
-            </div>
-            <div class="mt-8">
-                <img src="{{asset('img/gurney.webp')}}" alt="">
-                <div class="mt-4">Josh Brolin</div>
-                <div class="text-sm text-gray-400">Gurney Halleck</div>
-            </div>
+            @foreach ($movie['credits']['cast'] as $cast)
+            @if ($loop->index < 5) <div class="mt-8">
+                <img src="{{'https://image.tmdb.org/t/p/w300/'.$cast['profile_path']}}" alt="cast member">
+                <div class="mt-4">{{$cast['name']}}</div>
+                <div class="text-sm text-gray-400">{{$cast['character']}}</div>
         </div>
+        @endif
+        @endforeach
     </div>
+</div>
 </div>
 
 <!-- END OF CAST FOR THE MOVIE -->
@@ -100,28 +88,15 @@
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold">Images</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            <div class="mt-8">
-                <img src="{{ asset('img/dunepromo.jpg')}}" alt="">
-            </div>
-
-            <div class="mt-8">
-                <img src="{{ asset('img/dunepromo2.avif')}}" alt="">
-            </div>
-            <div class="mt-8">
-                <img src="{{ asset('img/dunepromo2.avif')}}" alt="">
-            </div>
-            <div class="mt-8">
-                <img src="{{ asset('img/dunepromo.jpg')}}" alt="">
-            </div>
-            <div class="mt-8">
-                <img src="{{ asset('img/dunepromo2.avif')}}" alt="">
-            </div>
-            <div class="mt-8">
-                <img src="{{ asset('img/dunepromo.jpg')}}" alt="">
-            </div>
-
+            @foreach ($movie['images']['backdrops'] as $image)
+            @if ($loop->index < 9) <div class="mt-8">
+                <img src="{{ 'https://image.tmdb.org/t/p/w500/'.$image['file_path']}}" alt="Movie Image">
         </div>
+        @endif
+        @endforeach
     </div>
+</div>
+</div>
 
 
-    @endsection
+@endsection
