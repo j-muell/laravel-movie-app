@@ -7,11 +7,13 @@
     <title>Movie App</title>
 
     @vite('resources/css/app.css')
-    <livewire:styles>
+    <livewire:styles />
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 </head>
 
-<body class="font-sans bg-gray-900 text-white">
-    <nav class="border-b border-gray-800">
+<body class="font-sans bg-primary-700 text-textHeading">
+    <nav class="border-b border-primary-600">
         <div class="container mx-auto flex flex-col md:flex-row items-center justify-between px-4 py-6">
             <ul class="flex flex-col md:flex-row items-center">
                 <li>
@@ -22,13 +24,13 @@
                     </a>
                 </li>
                 <li class="md:ml-16 mt-3 md:mt-0">
-                    <a href="#" class="hover:text-gray-300">Movies</a>
+                    <a href="#" class="hover:text-secondary">Movies</a>
                 </li>
                 <li class="md:ml-6 mt-3 md:mt-0">
-                    <a href="#" class="hover:text-gray-300">TV Shows</a>
+                    <a href="#" class="hover:text-secondary">TV Shows</a>
                 </li>
                 <li class="md:ml-6 mt-3 md:mt-0">
-                    <a href="#" class="hover:text-gray-300">Actors</a>
+                    <a href="#" class="hover:text-secondary">Actors</a>
                 </li>
             </ul>
             <div class="flex flex-col md:flex-row items-center">

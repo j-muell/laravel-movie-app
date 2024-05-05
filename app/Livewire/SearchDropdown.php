@@ -10,9 +10,13 @@ use Illuminate\Support\Facades\Http;
 
 class SearchDropdown extends Component
 {
+
+    public $isOpen = true;
     public $search = '';
     public function render()
     {
+
+
 
         $searchResults = [];
 

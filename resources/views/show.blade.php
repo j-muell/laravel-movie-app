@@ -4,9 +4,8 @@
 @php
 //dd($movie);
 @endphp
-
 <div class="movie-info">
-    <div class="movie-info border-b border-gray-800">
+    <div class="movie-info border-b border-primary-600">
         <div class="container mx-auto px-3 py-16 flex flex-col md:flex-row ">
             <img src="{{'https://image.tmdb.org/t/p/w500'.$movie['poster_path']}}" alt="movie" class="w-80 md:w-96">
             <div class="md:ml-24">
@@ -47,26 +46,61 @@
 
                 </div>
 
-                @if (count($movie['videos']['results']) > 0)
-                <div class="mt-12">
-                    <a href="https://youtube.com/watch?v={{$movie['videos']['results']['0']['key']}}" class="inline-flex items-center bg-orange-400 text-gray-900 rounded font-semibold px-5 py-4 hover:bg-orange-500 transition ease-in-out duration-150">
-                        <svg class="w-6 fill-current" viewBox="0 0 24 24">
-                            <path d="M0 0h24v24H0z" fill="none" />
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14V8l8 4-8 4z" />
-                        </svg>
-                        <span class="ml-2">Play Trailer</span>
 
-                    </a>
+                <!-- EMBED WRAPPER -->
+                <div x-data="{ isOpen: false }">
+                    @if (count($movie['videos']['results']) > 0)
+                    <div class="mt-12">
+                        <button @click="isOpen = true" class="inline-flex items-center bg-orange-400 text-gray-900 rounded font-semibold px-5 py-4 hover:bg-orange-500 transition ease-in-out duration-150">
+                            <svg class="w-6 fill-current" viewBox="0 0 24 24">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14V8l8 4-8 4z" />
+                            </svg>
+                            <span class="ml-2">Play Trailer</span>
+
+                        </button>
+                    </div>
+                    @endif
+
+                    <div style="background-color: rgba(0, 0, 0, 0.5);" class="fixed top-0 left-0 w-full h-full flex items-center shadow-lg overflow-y-auto" x-show.transition.opacity="isOpen">
+                        <div class="container mx-auto lg:px-32 rounded-lg overflow-y-auto">
+                            <div class="bg-primary-700 rounded">
+                                <div class="flex justify-end pr-4 pt-2">
+                                    <button @click="isOpen = false" class="text-3xl leading-none hover:text-secondary">
+                                        <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <path d="M18.3 5.71a.996.996 0 00-1.41 0L12 10.59 7.11 5.7A.996.996 0 105.7 7.11L10.59 12 5.7 16.89a.996.996 0 101.41 1.41L12 13.41l4.89 4.89a.996.996 0 101.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="modal-body px-8 py-8">
+                                    @php
+                                    $youtubeKey = $movie['videos']['results']['0']['key'];
+                                    foreach($movie['videos']['results'] as $video) {
+                                    if ($video['type'] == 'Trailer') {
+                                    $youtubeKey = $video['key'];
+                                    break;
+                                    }
+                                    }
+                                    @endphp
+                                    <div class="responsive-container overflow-hidden relative" style="padding-top: 56.25%">
+                                        <iframe width="560" height="315" class="responsive-iframe absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/{{$youtubeKey}}" style="border:0;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                @endif
             </div>
+
+            <!-- WRAPPER ENDS -->
+
         </div>
     </div>
 </div> <!-- END OF MOVIE INFO -->
 
 <!-- CAST FOR THE MOVIE -->
 
-<div class="movie-cast border-b border-gray-800">
+<div class="movie-cast border-b border-primary-600 bg-primary-600">
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold">Cast</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
@@ -84,7 +118,7 @@
 
 <!-- END OF CAST FOR THE MOVIE -->
 
-<div class="promo-images border-b border-gray-800">
+<div class="promo-images border-b border-primary-600">
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold">Images</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -95,7 +129,6 @@
         @endif
         @endforeach
     </div>
-</div>
 </div>
 
 
