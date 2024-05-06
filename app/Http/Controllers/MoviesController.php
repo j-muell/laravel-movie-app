@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+
+use App\ViewModels\MoviesViewModel;
+use App\ViewModels\MovieViewModel;
 
 class MoviesController extends Controller
 {
@@ -25,15 +29,16 @@ class MoviesController extends Controller
             ->get('https://api.themoviedb.org/3/genre/movie/list')
             ->json()['genres'];
 
-        $genres = collect($genres)->mapWithKeys(function ($genre) {
-            return [$genre['id'] => $genre['name']];
-        });
 
-        return view('index', [
-            'popularMovies' => $popularMovies,
-            'genres' => $genres,
-            'nowPlayingMovies' => $nowPlayingMovies,
-        ]);
+
+        $viewModel = new MoviesViewModel(
+            $popularMovies,
+            $nowPlayingMovies,
+            $genres
+        );
+
+
+        return view('index', $viewModel);
     }
 
     /**
@@ -73,34 +78,10 @@ class MoviesController extends Controller
                 ->json();
         }
 
+        $viewModel = new MovieViewModel($movie);
+
 
         // dump($movie);
-        return view('show', [
-            'movie' => $movie,
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('show', $viewModel);
     }
 }
