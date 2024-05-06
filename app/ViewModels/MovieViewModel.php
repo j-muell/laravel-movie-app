@@ -29,8 +29,9 @@ class MovieViewModel extends ViewModel
                 ]);
             }),
             'images' => collect($this->movie['images']['backdrops'])->take(9),
-        ])->only([
-            'poster_path', 'id', 'genres', 'title', 'vote_average', 'overview', 'release_date', 'crew', 'cast', 'images', 'videos', 'images'
         ]);
+        // ->only([
+        //     'poster_path', 'id', 'genres', 'title', 'vote_average', 'overview', 'release_date', 'crew', 'cast', 'images', 'videos', 'images'
+        // ]);
     }
 }
