@@ -4,3 +4,7 @@ This application is built in Laravel utilizing [TMDB](https://www.themoviedb.org
 
 ## Photos
 
+<img src="public/img/MovieAppMain.png">
+<img src="public/img/MovieAppMovie.png">
+<img src="public/img/MovieAppTrailer.png">
+<img src="public/img/MovieAppSearch.png">
